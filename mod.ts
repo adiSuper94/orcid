@@ -45,3 +45,4 @@ export async function getEducationSummary(orcidId: string): Promise<[Education[]
   const eduRecordsResult = parseEducationResp(data);
   return eduRecordsResult;
 }
+export type { Education, Employment };

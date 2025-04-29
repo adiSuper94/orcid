@@ -83,7 +83,7 @@ const DateSchema = z.pipe(
   }),
 );
 
-const EdEmSchema = z.pipe(
+const AffiliationGroupSchema = z.pipe(
   z.interface({
     "put-code": z.number(),
     "department-name": z.nullable(z.string()),
@@ -133,9 +133,20 @@ const EdEmSchema = z.pipe(
     };
   }),
 );
+/**
+ * Affiliation group object, which can be either employment or education
+ */
+export type AffiliationGroup = z.infer<typeof AffiliationGroupSchema>;
 
-export interface Employment extends z.infer<typeof EdEmSchema> {}
-export interface Education extends z.infer<typeof EdEmSchema> {}
+/**
+ * Employment summary object
+ */
+export interface Employment extends AffiliationGroup {}
+
+/**
+ * Education summary object
+ */
+export interface Education extends AffiliationGroup {}
 
 const EmploymentRespSchema = z.interface({
   "last-modified-date": z.interface({ value: z.number().check(z.minimum(0)) }),
@@ -144,7 +155,7 @@ const EmploymentRespSchema = z.interface({
     z.interface({
       summaries: z.array(
         z.pipe(
-          z.interface({ "employment-summary": EdEmSchema }),
+          z.interface({ "employment-summary": AffiliationGroupSchema }),
           z.transform((empSummary) => empSummary["employment-summary"] as Employment),
         ),
       ),
@@ -159,7 +170,7 @@ const EducationRespSchema = z.interface({
     z.interface({
       summaries: z.array(
         z.pipe(
-          z.interface({ "education-summary": EdEmSchema }),
+          z.interface({ "education-summary": AffiliationGroupSchema }),
           z.transform((empSummary) => empSummary["education-summary"] as Education),
         ),
       ),

@@ -1,6 +1,6 @@
 {
   "name": "@adisuper94/orcid",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "exports": "./mod.ts",
   "tasks": {
     "dev": "deno test --watch --allow-net",

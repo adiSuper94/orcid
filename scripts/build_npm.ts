@@ -15,7 +15,8 @@ await build({
   package: {
     name: name,
     version: version,
-    description: "Orcid API client",
+    description: "ORCID API client",
+    keywords: ["orcid", "api"],
     license: license,
     dependencies: {
       "@zod/mini": "^4.0.0-beta.20250424T163858",

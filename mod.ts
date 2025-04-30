@@ -18,8 +18,7 @@ async function getSummary(orcidId: string) {
 }
 
 /**
- * Calls orcid's public api endpoint to fetch employment details for the specified orcidID
- *  Fetches employment details for the specified orcidID
+ * Fetches `Employment` details of `orcidId` from orcid's public API
  *
  * ### Usage Eg.
  * ```typescript
@@ -53,7 +52,7 @@ export async function getEmployment(orcidId: string): Promise<[Employment[], und
 }
 
 /**
- * Calls orcid's public api endpoint to fetch education details for the specified orcidID
+ * Fetches `Education` details of `orcidId` from orcid's public API
  *
  * ### Usage Eg.
  * ```typescript

@@ -7,20 +7,16 @@ import {
   tryCatch,
 } from "./types.ts";
 
-async function getSummary(orcidId: string) {
-  const response = await fetch(`https://pub.orcid.org/v3.0/${orcidId}`, {
-    method: "GET",
-    headers: { Accept: "application/json" },
-  });
-  const record = await response.json();
-  console.log(JSON.stringify(record, null, 1));
-  return record;
-}
+/**
+ * @module
+ * This module provides functions to fetch `Education` and `Employment` details of an ORCID ID from
+ * ORCID's public API.
+ */
 
 /**
  * Fetches `Employment` details of `orcidId` from orcid's public API
  *
- * ### Usage Eg.
+ * @example
  * ```typescript
  * const orcidId = "0000-0000-0000-0000";
  * const [edu, err] = await getEmployment(orcidId);
@@ -54,7 +50,7 @@ export async function getEmployment(orcidId: string): Promise<[Employment[], und
 /**
  * Fetches `Education` details of `orcidId` from orcid's public API
  *
- * ### Usage Eg.
+ * @example
  * ```typescript
  * const orcidId = "0000-0000-0000-0000";
  * const [edu, err] = await getEducation(orcidId);

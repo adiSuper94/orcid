@@ -1,6 +1,11 @@
 import { z } from "@zod/mini";
 z.config(z.locales.en());
 
+interface DisambiguatedOrg {
+  id: string;
+  source: string;
+}
+
 const DisambiguatedOrgSchema = z.pipe(
   z.interface({
     "disambiguated-organization-identifier": z.string(),
@@ -12,7 +17,25 @@ const DisambiguatedOrgSchema = z.pipe(
   })),
 );
 
-interface DisambiguatedOrg extends z.infer<typeof DisambiguatedOrgSchema> {}
+interface zDisambiguatedOrg extends z.infer<typeof DisambiguatedOrgSchema> {}
+
+function _testTypeDisambiguatedOrg(disambiguatedOrg: DisambiguatedOrg): zDisambiguatedOrg {
+  return disambiguatedOrg;
+}
+
+function __testTypeDisambiguatedOrg(disambiguatedOrg: zDisambiguatedOrg): DisambiguatedOrg {
+  return disambiguatedOrg;
+}
+
+interface Org {
+  name: string;
+  address: {
+    city: string | null;
+    region: string | null;
+    country?: string;
+  };
+  disambiguatedOrg: DisambiguatedOrg | null;
+}
 
 const OrgSchema = z.pipe(
   z.interface({
@@ -20,7 +43,7 @@ const OrgSchema = z.pipe(
     address: z.interface({
       city: z.nullable(z.string()),
       region: z.nullable(z.string()),
-      country: z.optional(z.string()),
+      "country?": z.string(),
     }),
     "disambiguated-organization": z.nullable(DisambiguatedOrgSchema),
   }),
@@ -34,7 +57,20 @@ const OrgSchema = z.pipe(
   }),
 );
 
-interface Org extends z.infer<typeof OrgSchema> {}
+function _testTypeOrg(org: Org): zOrg {
+  return org;
+}
+function __testTypeOrg(org: zOrg): Org {
+  return org;
+}
+
+interface zOrg extends z.infer<typeof OrgSchema> {}
+
+interface SourceOrcid {
+  uri: string;
+  path: string;
+  host: string;
+}
 
 const SourceOrcidSchema = z.interface({
   uri: z.string(),
@@ -42,11 +78,19 @@ const SourceOrcidSchema = z.interface({
   host: z.string(),
 });
 
-interface SourceOrcid extends z.infer<typeof SourceOrcidSchema> {}
+interface zSourceOrcid extends z.infer<typeof SourceOrcidSchema> {}
+
+function _testTypeSourceOrcid(sourceOrcid: SourceOrcid): zSourceOrcid {
+  return sourceOrcid;
+}
+
+function __testTypeSourceOrcid(sourceOrcid: zSourceOrcid): SourceOrcid {
+  return sourceOrcid;
+}
 
 const SourceSchema = z.pipe(
   z.interface({
-    orcid: z.optional(SourceOrcidSchema),
+    "orcid?": SourceOrcidSchema,
     "source-client-id": z.nullable(z.string()),
     "source-name": z.interface({
       value: z.string(),
@@ -56,10 +100,26 @@ const SourceSchema = z.pipe(
     const name = source["source-name"].value;
     const clientId = source["source-client-id"];
     const orcid: SourceOrcid | undefined = source.orcid;
-    return { orcid, clientId, name };
+    const transformedSource: Source = { orcid, clientId, name };
+    return transformedSource;
   }),
 );
-interface Source extends z.infer<typeof SourceSchema> {}
+
+interface Source {
+  orcid?: SourceOrcid;
+  clientId: string | null;
+  name: string;
+}
+
+interface zSource extends z.infer<typeof SourceSchema> {}
+
+function _testTypeSource(source: Source): zSource {
+  return source;
+}
+
+function __testTypeSource(source: zSource): Source {
+  return source;
+}
 
 const DateSchema = z.pipe(
   z.interface({
@@ -83,10 +143,28 @@ const DateSchema = z.pipe(
   }),
 );
 
+/**
+ * Affiliation group object, which can be either employment or education
+ */
+export interface AffiliationGroup {
+  putCode: number;
+  departmentName?: string;
+  roleTitle?: string;
+  startDate?: Date;
+  endDate?: Date;
+  path: string;
+  visibility: string;
+  org?: Org;
+  url?: string;
+  source: Source;
+  createdDate: Date;
+  modifiedDate: Date;
+}
+
 const AffiliationGroupSchema = z.pipe(
   z.interface({
     "put-code": z.number(),
-    "department-name": z.nullable(z.string()),
+    "department-name?": z.nullable(z.string()),
     "role-title": z.nullable(z.string()),
     "start-date": z.nullable(DateSchema),
     "end-date": z.nullable(DateSchema),
@@ -114,29 +192,35 @@ const AffiliationGroupSchema = z.pipe(
       path,
       visibility,
     } = emp;
-    const org: Org | null = emp.organization;
+    const org: Org | undefined | null = emp.organization;
     const source: Source = emp.source;
     const url = emp.url?.value;
-    return {
+    const affiliationGroup: AffiliationGroup = {
       source,
       putCode,
-      departmentName,
-      roleTitle,
-      startDate,
-      endDate,
+      departmentName: departmentName ?? undefined,
+      roleTitle: roleTitle ?? undefined,
+      startDate: startDate ?? undefined,
+      endDate: endDate ?? undefined,
       path,
       visibility,
-      org,
-      url,
+      org: org ?? undefined,
+      url: url ?? undefined,
       createdDate: emp["created-date"],
       modifiedDate: emp["last-modified-date"],
     };
+    return affiliationGroup;
   }),
 );
-/**
- * Affiliation group object, which can be either employment or education
- */
-export type AffiliationGroup = z.infer<typeof AffiliationGroupSchema>;
+
+interface zAffiliationGroup extends z.infer<typeof AffiliationGroupSchema> {}
+
+function _testTypeAffiliationGroup(affiliationGroup: AffiliationGroup): zAffiliationGroup {
+  return affiliationGroup;
+}
+function __testTypeAffiliationGroup(affiliationGroup: zAffiliationGroup): AffiliationGroup {
+  return affiliationGroup;
+}
 
 /**
  * Employment summary object

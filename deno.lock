@@ -1,9 +1,10 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@david/code-block-writer@^13.0.2": "13.0.3",
     "jsr:@deno/cache-dir@~0.10.3": "0.10.3",
     "jsr:@deno/dnt@~0.41.3": "0.41.3",
+    "jsr:@deno/graph@~0.73.1": "0.73.1",
     "jsr:@std/assert@0.223": "0.223.0",
     "jsr:@std/assert@0.226": "0.226.0",
     "jsr:@std/assert@1": "1.0.13",
@@ -22,7 +23,7 @@
     "jsr:@std/path@~0.225.2": "0.225.2",
     "jsr:@ts-morph/bootstrap@0.24": "0.24.0",
     "jsr:@ts-morph/common@0.24": "0.24.0",
-    "npm:@zod/mini@^4.0.0-beta.20250424T163858": "4.0.0-beta.20250424T163858"
+    "npm:@zod/mini@^4.0.0-beta.20250430T185432": "4.0.0-beta.20250430T185432"
   },
   "jsr": {
     "@david/code-block-writer@13.0.3": {
@@ -31,6 +32,7 @@
     "@deno/cache-dir@0.10.3": {
       "integrity": "eb022f84ecc49c91d9d98131c6e6b118ff63a29e343624d058646b9d50404776",
       "dependencies": [
+        "jsr:@deno/graph",
         "jsr:@std/fmt@0.223",
         "jsr:@std/fs@0.223",
         "jsr:@std/io",
@@ -47,6 +49,9 @@
         "jsr:@std/path@1",
         "jsr:@ts-morph/bootstrap"
       ]
+    },
+    "@deno/graph@0.73.1": {
+      "integrity": "cd69639d2709d479037d5ce191a422eabe8d71bb68b0098344f6b07411c84d41"
     },
     "@std/assert@0.223.0": {
       "integrity": "eb8d6d879d76e1cc431205bd346ed4d88dc051c6366365b1af47034b0670be24"
@@ -127,11 +132,11 @@
     }
   },
   "npm": {
-    "@zod/core@0.9.0": {
-      "integrity": "sha512-bVfPiV2kDUkAJ4ArvV4MHcPZA8y3xOX6/SjzSy2kX2ACopbaaAP4wk6hd/byRmfi9MLNai+4SFJMmcATdOyclg=="
+    "@zod/core@0.10.0": {
+      "integrity": "sha512-iMITRygme3v9jPsITJjvRMw60+MQq7MWnNpJleRkfjeSCjBm3c1/tiw3NUS4re/M2CBXVP5kAjI7sQrf22twXA=="
     },
-    "@zod/mini@4.0.0-beta.20250424T163858": {
-      "integrity": "sha512-dUrw6GDXsFbbjvHBlqOrkWiFFNbo9EW+/D3NcoO+28rJdLM330tSMK16m3NrPhDbLbZU6VLEd0yL650w5Kqmkg==",
+    "@zod/mini@4.0.0-beta.20250430T185432": {
+      "integrity": "sha512-PLamkZ3BPeUXAYUhU5CaLY6ZaAQ4PVSoy2bh54UWXPx7fCC/+vWicLmgAt8+lwjaqpe2AW8FwiLXYoCb1UIJxA==",
       "dependencies": [
         "@zod/core"
       ]
@@ -141,7 +146,7 @@
     "dependencies": [
       "jsr:@deno/dnt@~0.41.3",
       "jsr:@std/assert@1",
-      "npm:@zod/mini@^4.0.0-beta.20250424T163858"
+      "npm:@zod/mini@^4.0.0-beta.20250430T185432"
     ]
   }
 }

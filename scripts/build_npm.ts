@@ -5,7 +5,7 @@ import denoJson from "../deno.json" with { type: "json" };
 const { name, version, license } = denoJson;
 
 await build({
-  entryPoints: ["./mod.ts"],
+  entryPoints: ["./lib/index.ts"],
   outDir: "./npm",
   shims: {
     deno: true,

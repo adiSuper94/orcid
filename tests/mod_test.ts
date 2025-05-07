@@ -1,4 +1,4 @@
-import { getEducation, getEmployment } from "./mod.ts";
+import { getEducation, getEmployment } from "../lib/index.ts";
 import { assertEquals, fail } from "@std/assert";
 
 Deno.test("Employment Summary: Azra", async function addTest() {

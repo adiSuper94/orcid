@@ -28,7 +28,7 @@ await build({
     homepage: "https://github.com/adiSuper94/orcid#readme",
     author: "Aditya Subramanian",
     dependencies: {
-      "@zod/mini": "^4.0.0-beta.20250424T163858",
+      "zod": "^3.25.67",
     },
   },
   postBuild() {

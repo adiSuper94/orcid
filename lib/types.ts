@@ -1,4 +1,4 @@
-import { z } from "@zod/mini";
+import * as z from "zod/v4-mini";
 z.config(z.locales.en());
 
 interface DisambiguatedOrg {
@@ -7,7 +7,7 @@ interface DisambiguatedOrg {
 }
 
 const DisambiguatedOrgSchema = z.pipe(
-  z.interface({
+  z.object({
     "disambiguated-organization-identifier": z.string(),
     "disambiguation-source": z.string(),
   }),
@@ -32,18 +32,18 @@ interface Org {
   address: {
     city: string | null;
     region: string | null;
-    country?: string;
+    country?: string | null;
   };
   disambiguatedOrg: DisambiguatedOrg | null;
 }
 
 const OrgSchema = z.pipe(
-  z.interface({
+  z.object({
     name: z.string(),
-    address: z.interface({
+    address: z.object({
       city: z.nullable(z.string()),
       region: z.nullable(z.string()),
-      "country?": z.string(),
+      country: z.nullish(z.string()),
     }),
     "disambiguated-organization": z.nullable(DisambiguatedOrgSchema),
   }),
@@ -72,7 +72,7 @@ interface SourceOrcid {
   host: string;
 }
 
-const SourceOrcidSchema = z.interface({
+const SourceOrcidSchema = z.object({
   uri: z.string(),
   path: z.string(),
   host: z.string(),
@@ -89,10 +89,10 @@ function __testTypeSourceOrcid(sourceOrcid: zSourceOrcid): SourceOrcid {
 }
 
 const SourceSchema = z.pipe(
-  z.interface({
-    "orcid?": SourceOrcidSchema,
+  z.object({
+    "orcid": z.optional(SourceOrcidSchema),
     "source-client-id": z.nullable(z.string()),
-    "source-name": z.interface({
+    "source-name": z.object({
       value: z.string(),
     }),
   }),
@@ -122,17 +122,17 @@ function __testTypeSource(source: zSource): Source {
 }
 
 const DateSchema = z.pipe(
-  z.interface({
-    year: z.interface({
+  z.object({
+    year: z.object({
       value: z.coerce.number(),
     }),
     month: z.nullish(
-      z.interface({
+      z.object({
         value: z.coerce.number(),
       }),
     ),
     day: z.nullish(
-      z.interface({
+      z.object({
         value: z.coerce.number(),
       }),
     ),
@@ -162,23 +162,23 @@ export interface AffiliationGroup {
 }
 
 const AffiliationGroupSchema = z.pipe(
-  z.interface({
+  z.object({
     "put-code": z.number(),
-    "department-name?": z.nullable(z.string()),
+    "department-name": z.nullish(z.string()),
     "role-title": z.nullable(z.string()),
     "start-date": z.nullable(DateSchema),
     "end-date": z.nullable(DateSchema),
     path: z.string(),
     visibility: z.string(),
     organization: z.nullable(OrgSchema),
-    url: z.nullable(z.interface({ value: z.string().check(z.url()) })),
+    url: z.nullable(z.object({ value: z.string().check(z.url()) })),
     source: SourceSchema,
     "created-date": z.pipe(
-      z.interface({ value: z.number().check(z.minimum(0)) }),
+      z.object({ value: z.number().check(z.minimum(0)) }),
       z.transform((time) => new Date(time.value)),
     ),
     "last-modified-date": z.pipe(
-      z.interface({ value: z.number().check(z.minimum(0)) }),
+      z.object({ value: z.number().check(z.minimum(0)) }),
       z.transform((time) => new Date(time.value)),
     ),
   }),
@@ -232,14 +232,14 @@ export interface Employment extends AffiliationGroup {}
  */
 export interface Education extends AffiliationGroup {}
 
-const EmploymentRespSchema = z.interface({
-  "last-modified-date": z.interface({ value: z.number().check(z.minimum(0)) }),
+const EmploymentRespSchema = z.object({
+  "last-modified-date": z.object({ value: z.number().check(z.minimum(0)) }),
   path: z.string(),
   "affiliation-group": z.array(
-    z.interface({
+    z.object({
       summaries: z.array(
         z.pipe(
-          z.interface({ "employment-summary": AffiliationGroupSchema }),
+          z.object({ "employment-summary": AffiliationGroupSchema }),
           z.transform((empSummary) => empSummary["employment-summary"] as Employment),
         ),
       ),
@@ -247,14 +247,14 @@ const EmploymentRespSchema = z.interface({
   ),
 });
 
-const EducationRespSchema = z.interface({
-  "last-modified-date": z.nullable(z.interface({ value: z.number().check(z.minimum(0)) })),
+const EducationRespSchema = z.object({
+  "last-modified-date": z.nullable(z.object({ value: z.number().check(z.minimum(0)) })),
   path: z.string(),
   "affiliation-group": z.array(
-    z.interface({
+    z.object({
       summaries: z.array(
         z.pipe(
-          z.interface({ "education-summary": AffiliationGroupSchema }),
+          z.object({ "education-summary": AffiliationGroupSchema }),
           z.transform((empSummary) => empSummary["education-summary"] as Education),
         ),
       ),
